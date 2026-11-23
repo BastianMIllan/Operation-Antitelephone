@@ -194,7 +194,7 @@ Or check it directly in a browser:
 It only reads. It never sends anything.
 
 ```bash
-python receiver.py           # Windows: double-click receiver.bat (full screen, restarts itself if it crashes)
+python receiver.py           # Windows: double-click receiver.bat (opens a terminal window and restarts itself if it crashes)
 python receiver.py --demo    # simulated messages, including a fake hit, to see everything working
 python receiver.py --fps 2   # lighter on an always-on screen
 ```
