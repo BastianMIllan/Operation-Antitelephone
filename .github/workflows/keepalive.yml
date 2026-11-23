@@ -1,0 +1,23 @@
+name: keep the robot awake
+
+# GitHub pauses scheduled workflows in repositories with no activity for 60 days. Once a week this re-enables them.
+# It reads no messages, so it is the only workflow that holds the "actions: write" permission.
+on:
+  schedule:
+    - cron: "17 3 * * 1"     # Mondays 03:17 UTC
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  keepalive:
+    if: github.repository == 'BastianMIllan/Operation-Antitelephone'    # forks and copies stay quiet
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/robot.yml/enable"
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/keepalive.yml/enable"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

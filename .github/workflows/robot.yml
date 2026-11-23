@@ -1,0 +1,31 @@
+name: station robot
+
+on:
+  issues:
+    types: [opened]
+  schedule:
+    - cron: "7 * * * *"      # every hour, at minute 7
+  workflow_dispatch:
+
+permissions:
+  issues: write        # reply to messages, add labels, close finished ones
+  contents: read
+
+concurrency:
+  group: station-robot
+  cancel-in-progress: false
+
+jobs:
+  robot:
+    if: github.repository == 'BastianMIllan/Operation-Antitelephone'    # forks and copies stay quiet
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"     # Unicode 15.0, as RULES.md says
+      # No message text is ever placed into this command line; station.py reads messages through GitHub's API.
+      - run: python station.py robot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
